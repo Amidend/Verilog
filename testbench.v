@@ -1,29 +1,21 @@
-`timescale 1ns / 1ps
+`timescale 1 ns / 100 ps
 module testbench;
-// input and output test signals
-reg [1:0] key;
-wire [9:0] led;
-// creating the instance of the module we want to test
-// lab1 - module name
-// dut - instance name (‘dut' means ‘device under test')
-lab1 dut ( key, led );
-// do at the beginning of the simulation
+reg s, r;
+wire q, q_n;
+d_latch d_latch (s, r, q, q_n);
+initial $dumpvars;
 initial
 begin
-key = 2'b00; // set test signals value
-#10; // pause
-key = 2'b01; // set test signals value
-#10; // pause
-key = 2'b10; // set test signals value
-#10; // pause
-key = 2'b11; // set test signals value
-#10; // pause
+$monitor ("%0d s %b r %b q %b q_n %b", $time, s, r, q, q_n);
+# 10; s = 0; r = 0;
+# 10; s = 1; r = 0;
+# 10; s = 0; r = 0;
+# 10; s = 0; r = 1;
+# 10; s = 0; r = 0;
+# 10; s = 1; r = 1;
+# 10; s = 0; r = 0;
+# 10; s = 0; r = 0;
+# 10;
+$finish;
 end
-// do at the beginning of the simulation
-// print signal values on every change
-initial
-$monitor("key=%b led=%b", key, led);
-// do at the beginning of the simulation
-initial
-$dumpvars; //iVerilog dump init
 endmodule
